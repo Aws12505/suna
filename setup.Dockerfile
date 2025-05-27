@@ -8,7 +8,9 @@ RUN apt-get update && apt-get install -y \
 RUN pip install poetry
 
 # ✅ Install Supabase CLI (fixed)
-RUN curl -sLo /usr/local/bin/supabase https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64 && \
-    chmod +x /usr/local/bin/supabase
+RUN curl -sL --fail https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64 -o /usr/local/bin/supabase && \
+    chmod +x /usr/local/bin/supabase && \
+    /usr/local/bin/supabase --version
+
 
 WORKDIR /app
