@@ -1,16 +1,13 @@
 # setup.Dockerfile
 FROM python:3.11-slim
 
-# Install system dependencies needed by the setup script
+# Install tools needed for setup
 RUN apt-get update && apt-get install -y \
-    git curl docker.io nodejs npm \
+    curl git docker.io nodejs npm bash \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
+# Install Poetry (backend dependency manager)
 RUN pip install poetry
 
-# Set working directory
+# Create working dir
 WORKDIR /app
-
-# Default command overridden by docker-compose entrypoint
-ENTRYPOINT ["python3"]

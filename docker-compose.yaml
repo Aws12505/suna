@@ -1,14 +1,15 @@
 version: '3.9'
 
 services:
-  setup:
+ setup:
     build:
       context: .
       dockerfile: setup.Dockerfile
     volumes:
       - .:/app
+      - /var/run/docker.sock:/var/run/docker.sock  # allow docker from inside
     working_dir: /app
-    entrypoint: ["python3", "setup.py"]
+    entrypoint: ["bash"]
     stdin_open: true
     tty: true
 
