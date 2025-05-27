@@ -7,11 +7,12 @@ services:
       dockerfile: setup.Dockerfile
     volumes:
       - .:/app
-      - /var/run/docker.sock:/var/run/docker.sock  # Allow setup container to run Docker commands
+      - /var/run/docker.sock:/var/run/docker.sock
     working_dir: /app
     entrypoint: ["bash"]
     stdin_open: true
     tty: true
+    profiles: ["default"]  # this runs by default
 
   redis:
     image: redis:7-alpine
@@ -26,6 +27,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+    profiles: ["app"]
 
   rabbitmq:
     image: rabbitmq
@@ -41,6 +43,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+    profiles: ["app"]
 
   backend:
     build:
@@ -66,6 +69,7 @@ services:
         condition: service_healthy
       worker:
         condition: service_started
+    profiles: ["app"]
 
   worker:
     build:
@@ -88,6 +92,7 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
+    profiles: ["app"]
 
   frontend:
     init: true
@@ -103,6 +108,7 @@ services:
     command: ["npm", "run", "start"]
     depends_on:
       - backend
+    profiles: ["app"]
 
 volumes:
   redis_data:
